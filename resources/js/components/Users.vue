@@ -59,10 +59,10 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit="createUser">
+                    <form @submit.prevent="createUser">
                     <div class="modal-body">
                         <div class="form-group">
-                            <input v-model="form.name" type="text" name="name"
+                            <input v-model="form.name" type="text" name="name" placeholder="User Name"
                                    class="form-control" :class="{ 'is-invalid':form.errors.has('username') }">
                             <has-error :form="form" field="name"></has-error>
                         </div>
@@ -74,25 +74,26 @@
                         </div>
                         <div class="form-group">
                             <textarea v-model="form.bio" class="form-control" :class="{ 'is-invalid':form.errors.has('bio') }"
-                                   name="bio"/>
+                                   name="bio" placeholder="Short bio for User (Optional)"/>
                             <has-error :form="form" field="bio"></has-error>
                         </div>
                         <div class="form-group">
-                            <select v-model="form.type" type="text" name="type"
+                            <select v-model="form.type" name="type"
                                    class="form-control" :class="{ 'is-invalid':form.errors.has('type') }">
-                                <option value="">1</option>
-                                <option value="">2</option>
+                                <option value="admin">Admin</option>
+                                <option value="nm_user">Normal User</option>
                             </select>
                             <has-error :form="form" field="type"></has-error>
                         </div>
                         <div class="form-group">
-                            <input v-model="form.password" type="password" name="password" class="form-control">
+                            <input v-model="form.password" type="password" name="password" class="form-control"
+                            placeholder="Password">
                             <has-error :form="form" field="password"></has-error>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Create</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
                     </div>
                     </form>
                 </div>
@@ -113,6 +114,11 @@
                     bio: '',
                     photo: ''
                 })
+            }
+        },
+        methods: {
+            createUser(){
+                this.form.post('api/user');
             }
         },
         mounted() {
