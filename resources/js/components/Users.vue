@@ -25,11 +25,11 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Jhon Doe</td>
-                                <td>test@test.com</td>
-                                <td>Approved</td>
+                            <tr v-for="user in users" :key="user.id">
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.type }}</td>
                                 <td>
                                     <a href="">
                                         <i class="fa fa-edit blue"></i>
@@ -63,7 +63,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <input v-model="form.name" type="text" name="name" placeholder="User Name"
-                                   class="form-control" :class="{ 'is-invalid':form.errors.has('username') }">
+                                   class="form-control" :class="{ 'is-invalid':form.errors.has('name') }">
                             <has-error :form="form" field="name"></has-error>
                         </div>
                         <div class="form-group">
@@ -73,22 +73,23 @@
                             <has-error :form="form" field="email"></has-error>
                         </div>
                         <div class="form-group">
-                            <textarea v-model="form.bio" class="form-control" :class="{ 'is-invalid':form.errors.has('bio') }"
-                                   name="bio" placeholder="Short bio for User (Optional)"/>
-                            <has-error :form="form" field="bio"></has-error>
+                            <input v-model="form.password" type="password" name="password" class="form-control"
+                                   :class="{ 'is-invalid': form.errors.has('password') }"
+                                   placeholder="Password">
+                            <has-error :form="form" field="password"></has-error>
                         </div>
                         <div class="form-group">
                             <select v-model="form.type" name="type"
-                                   class="form-control" :class="{ 'is-invalid':form.errors.has('type') }">
+                                    class="form-control" :class="{ 'is-invalid':form.errors.has('type') }">
                                 <option value="admin">Admin</option>
                                 <option value="nm_user">Normal User</option>
                             </select>
                             <has-error :form="form" field="type"></has-error>
                         </div>
                         <div class="form-group">
-                            <input v-model="form.password" type="password" name="password" class="form-control"
-                            placeholder="Password">
-                            <has-error :form="form" field="password"></has-error>
+                            <textarea v-model="form.bio" class="form-control" :class="{ 'is-invalid':form.errors.has('bio') }"
+                                   name="bio" placeholder="Short bio for User (Optional)"/>
+                            <has-error :form="form" field="bio"></has-error>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -106,6 +107,7 @@
     export default {
         data() {
             return {
+                users : {},
                 form: new Form({
                     name : '',
                     email: '',
@@ -117,9 +119,16 @@
             }
         },
         methods: {
+            loadUsers(){
+                axios.get('api/user').then((result) => this.users = result.data.data);
+            },
+
             createUser(){
                 this.form.post('api/user');
             }
+        },
+        created() {
+            this.loadUsers();
         },
         mounted() {
         }
