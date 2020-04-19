@@ -21,6 +21,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Status</th>
+                                <th>Created at</th>
                                 <th>Modify</th>
                             </tr>
                             </thead>
@@ -29,7 +30,8 @@
                                 <td>{{ user.id }}</td>
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.email }}</td>
-                                <td>{{ user.type }}</td>
+                                <td>{{ user.type | upText }}</td>
+                                <td>{{ user.created_at | convertDate}}</td>
                                 <td>
                                     <a href="">
                                         <i class="fa fa-edit blue"></i>
@@ -124,7 +126,9 @@
             },
 
             createUser(){
+                this.$Progress.start();
                 this.form.post('api/user');
+                this.$Progress.finish();
             }
         },
         created() {

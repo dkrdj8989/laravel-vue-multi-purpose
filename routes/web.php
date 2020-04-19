@@ -11,12 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('{path}', "HomeController@index")->where('path', '([A-z\d-\/_.]+)?'); // vue 라우터 때문에 entry를 만들어줘야함
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        return view('index');
+    });
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('{path}','HomeController@index')->where( 'path', '([A-z\d\-/_.]+)?' ); // vue 라우터 때문에 entry를 만들어줘야함
+});

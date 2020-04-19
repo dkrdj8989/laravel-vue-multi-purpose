@@ -8,6 +8,7 @@ require('./bootstrap');
 require('admin-lte/dist/js/adminlte.min');
 
 window.Vue = require('vue');
+import moment from 'moment';
 import { Form, HasError, AlertError} from 'vform';
 
 window.Form = Form;
@@ -16,11 +17,28 @@ Vue.component(AlertError.name, AlertError)
 
 import VueRouter from  'vue-router'
 Vue.use(VueRouter)
+
+import VueProgressBar from 'vue-progressbar'
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '3px'
+})
+
 const routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/users', component: require('./components/Users.vue').default}
 ]
+
+// 글로벌 필터
+Vue.filter('upText', function (text) {
+    return text.charAt(0).toUpperCase().slice(1);
+});
+
+Vue.filter('convertDate', function(date) {
+    return moment(date).format('YYYY MM DD')
+});
 
 const router = new VueRouter({
     mode: "history",
